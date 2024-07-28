@@ -1,0 +1,17 @@
+spring:
+  mvc:
+    log-request-details: true
+  application:
+    name: marketplaceRoiManager
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+api:
+  allegro:
+    client-id: ${ALLEGRO_CLIENT_ID}
+    client-secret: ${ALLEGRO_CLIENT_SECRET}
+    scope: allegro:api:profile:read
