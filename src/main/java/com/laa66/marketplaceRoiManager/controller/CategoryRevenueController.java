@@ -1,15 +1,18 @@
 package com.laa66.marketplaceRoiManager.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import com.laa66.marketplaceRoiManager.service.AllegroDataService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@AllArgsConstructor
 public class CategoryRevenueController {
 
-    @GetMapping("/")
-    public OAuth2User getRevenueCalcForCategory(@AuthenticationPrincipal OAuth2User principal) {
-        return principal;
+    private final AllegroDataService allegroDataService;
+
+    @GetMapping("/calculate")
+    public void getRevenueCalcForCategory() {
+        allegroDataService.calculateOfferFeeAndCommission();
     }
 }
