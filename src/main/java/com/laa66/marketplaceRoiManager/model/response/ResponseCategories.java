@@ -1,0 +1,8 @@
+package com.laa66.marketplaceRoiManager.model.response;
+
+import com.laa66.marketplaceRoiManager.dto.CategoryDto;
+
+import java.util.List;
+
+public record ResponseCategories(List<CategoryDto> categories) {
+}

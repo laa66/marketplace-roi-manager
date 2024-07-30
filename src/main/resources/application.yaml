@@ -4,6 +4,10 @@ spring:
   application:
     name: marketplaceRoiManager
 
+logging:
+  level:
+    root: INFO
+
 api:
   allegro:
     client-id: ${ALLEGRO_CLIENT_ID}
