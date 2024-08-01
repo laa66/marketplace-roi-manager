@@ -7,6 +7,6 @@ import java.util.List;
 
 @Value
 @NoArgsConstructor(force = true)
-public class CategoriesDto {
+public class CategoryCollectionDto {
     List<CategoryDto> categories;
 }

@@ -1,6 +1,6 @@
 package com.laa66.marketplaceRoiManager.controller;
 
-import com.laa66.marketplaceRoiManager.dto.CategoriesDto;
+import com.laa66.marketplaceRoiManager.dto.CategoryCollectionDto;
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
 import com.laa66.marketplaceRoiManager.service.AllegroDataService;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class CategoryRevenueController {
 
     @GetMapping("/categories")
     @ResponseStatus(code = HttpStatus.OK)
-    public CategoriesDto getAllCategories() {
+    public CategoryCollectionDto getAllCategories() {
         List<CategoryDto> categoriesTree = allegroDataService.getCategoriesTree();
         System.out.println(categoriesTree);
         return null;

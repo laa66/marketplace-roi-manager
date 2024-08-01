@@ -1,7 +1,7 @@
 package com.laa66.marketplaceRoiManager.service;
 
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
-import com.laa66.marketplaceRoiManager.model.response.ResponseCategories;
+import com.laa66.marketplaceRoiManager.model.response.ResponseCategoryCollection;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -40,20 +40,20 @@ public class AllegroDataServiceImpl implements AllegroDataService {
                         categoryDtoQueue.addAll(categories);
                         globalCategories.addAll(categories);
                     });
-            log.info("[count={},queue={},list={}]", count, categoryDtoQueue.size(), globalCategories.size());
+            log.info("count={},queue={},list={}", count, categoryDtoQueue.size(), globalCategories.size());
         }
         return globalCategories;
     }
 
     @Override
-    public ResponseCategories getCategoryChildren(@Nullable String categoryId) {
-        ResponseCategories categories = allegroApiRestTemplate
+    public ResponseCategoryCollection getCategoryChildren(@Nullable String categoryId) {
+        ResponseCategoryCollection categories = allegroApiRestTemplate
                 .getForObject(categoryId == null ? SALE_CATEGORIES_URL : UriComponentsBuilder
                                 .fromUri(SALE_CATEGORIES_URL)
                                 .queryParam("parent.id", categoryId)
                                 .build()
                                 .toUri(),
-                        ResponseCategories.class);
+                        ResponseCategoryCollection.class);
         return Optional.ofNullable(categories)
                 .orElseThrow(API_RESPONSE_EXCEPTION);
     }

@@ -11,9 +11,8 @@ logging:
   level:
     root: INFO
 
-
 api:
   allegro:
     client-id: ${ALLEGRO_CLIENT_ID}
     client-secret: ${ALLEGRO_CLIENT_SECRET}
-    scope: allegro:api:profile:read
+    scope: allegro:api:profile:read,allegro:api:sale:offers:read
