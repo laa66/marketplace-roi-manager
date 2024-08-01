@@ -3,6 +3,7 @@ package com.laa66.marketplaceRoiManager.service;
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
 import com.laa66.marketplaceRoiManager.model.response.ResponseCategories;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -11,12 +12,11 @@ import java.net.URI;
 import java.util.*;
 import java.util.function.Supplier;
 
-import static java.util.stream.Collectors.toMap;
-
+@Slf4j
 @AllArgsConstructor
 public class AllegroDataServiceImpl implements AllegroDataService {
 
-    private RestTemplate allegroApiRestTemplate;
+    private final RestTemplate allegroApiRestTemplate;
 
     private final static Supplier<RuntimeException> API_RESPONSE_EXCEPTION = () -> new RuntimeException("API response exception thrown.");
 
@@ -24,21 +24,23 @@ public class AllegroDataServiceImpl implements AllegroDataService {
     private final static URI SALE_CATEGORIES_URL = URI.create("https://api.allegro.pl/sale/categories");
 
     @Override
-    public Map<String, CategoryDto> getCategoriesTree() {
+    public List<CategoryDto> getCategoriesTree() {
         Queue<CategoryDto> categoryDtoQueue =
                 new LinkedList<>(getCategoryChildren(null).categories());
 
-        Map<String, CategoryDto> globalCategories = categoryDtoQueue.stream()
-                .collect(toMap(CategoryDto::getName, value -> value, (dto1, dto2) -> dto2, TreeMap::new));
+        LinkedList<CategoryDto> globalCategories = new LinkedList<>(categoryDtoQueue);
 
+        int count = 0;
         while (!categoryDtoQueue.isEmpty()) {
+            count++;
             CategoryDto categoryDto = categoryDtoQueue.poll();
             Optional.ofNullable(categoryDto)
                     .ifPresent(polledDto -> {
                         List<CategoryDto> categories = getCategoryChildren(polledDto.getId()).categories();
                         categoryDtoQueue.addAll(categories);
-                        categories.forEach(dto -> globalCategories.put(dto.getName(), dto));
+                        globalCategories.addAll(categories);
                     });
+            log.info("[count={},queue={},list={}]", count, categoryDtoQueue.size(), globalCategories.size());
         }
         return globalCategories;
     }
