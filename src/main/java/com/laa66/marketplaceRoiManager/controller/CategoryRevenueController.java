@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -18,7 +20,7 @@ public class CategoryRevenueController {
 
     @GetMapping("/categories")
     @ResponseStatus(code = HttpStatus.OK)
-    public Collection<CategoryDto> getAllCategories() {
-        return allegroDataService.getCategoriesTree();
+    public void getAllCategories() {
+        Map<String, CategoryDto> categoriesTree = allegroDataService.getCategoriesTree();
     }
 }

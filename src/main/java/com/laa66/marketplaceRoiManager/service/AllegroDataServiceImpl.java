@@ -3,8 +3,6 @@ package com.laa66.marketplaceRoiManager.service;
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
 import com.laa66.marketplaceRoiManager.model.response.ResponseCategories;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -12,6 +10,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toMap;
 
 @AllArgsConstructor
 public class AllegroDataServiceImpl implements AllegroDataService {
@@ -24,35 +24,27 @@ public class AllegroDataServiceImpl implements AllegroDataService {
     private final static URI SALE_CATEGORIES_URL = URI.create("https://api.allegro.pl/sale/categories");
 
     @Override
-    public Collection<CategoryDto> getCategoriesTree() {
+    public Map<String, CategoryDto> getCategoriesTree() {
         Queue<CategoryDto> categoryDtoQueue =
                 new LinkedList<>(getCategoryChildren(null).categories());
 
-        Set<CategoryDto> globalCategories = new TreeSet<>((dto1, dto2) -> {
-            int res = String.CASE_INSENSITIVE_ORDER.compare(dto1.getName(), dto2.getName());
-            return (res != 0) ? res : dto1.getName().compareTo(dto2.getName());
-        });
-
-        globalCategories.addAll(categoryDtoQueue);
+        Map<String, CategoryDto> globalCategories = categoryDtoQueue.stream()
+                .collect(toMap(CategoryDto::getName, value -> value, (dto1, dto2) -> dto2, TreeMap::new));
 
         while (!categoryDtoQueue.isEmpty()) {
             CategoryDto categoryDto = categoryDtoQueue.poll();
             Optional.ofNullable(categoryDto)
                     .ifPresent(polledDto -> {
-                        List<CategoryDto> categories = getCategoryChildren(polledDto.getId())
-                                .categories();
-                        categoryDtoQueue
-                                .addAll(categories);
-                        globalCategories.addAll(categories);
+                        List<CategoryDto> categories = getCategoryChildren(polledDto.getId()).categories();
+                        categoryDtoQueue.addAll(categories);
+                        categories.forEach(dto -> globalCategories.put(dto.getName(), dto));
                     });
         }
         return globalCategories;
     }
 
-    // TODO throwable to private service field
     @Override
     public ResponseCategories getCategoryChildren(@Nullable String categoryId) {
-        System.out.println(categoryId);
         ResponseCategories categories = allegroApiRestTemplate
                 .getForObject(categoryId == null ? SALE_CATEGORIES_URL : UriComponentsBuilder
                                 .fromUri(SALE_CATEGORIES_URL)

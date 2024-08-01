@@ -4,9 +4,9 @@ import com.laa66.marketplaceRoiManager.dto.CategoryDto;
 import com.laa66.marketplaceRoiManager.model.response.ResponseCategories;
 import org.springframework.lang.Nullable;
 
-import java.util.Collection;
+import java.util.Map;
 
 public interface AllegroDataService {
-    Collection<CategoryDto> getCategoriesTree();
+    Map<String, CategoryDto> getCategoriesTree();
     ResponseCategories getCategoryChildren(@Nullable String categoryId);
 }
