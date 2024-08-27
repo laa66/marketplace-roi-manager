@@ -2,7 +2,6 @@ package com.laa66.marketplaceRoiManager.controller;
 
 import com.laa66.marketplaceRoiManager.dto.CategoryCollectionDto;
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
-import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseCommission;
 import com.laa66.marketplaceRoiManager.service.AllegroDataService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,11 +23,5 @@ public class CategoryRevenueController {
     public CategoryCollectionDto getAllCategories() {
         List<CategoryDto> categoriesTree = allegroDataService.getCategoriesTree();
         return new CategoryCollectionDto(categoriesTree);
-    }
-
-    @GetMapping("/calculate")
-    @ResponseStatus(code = HttpStatus.OK)
-    public ResponseCommission calculateOfferCommission() {
-        throw new UnsupportedOperationException();
     }
 }

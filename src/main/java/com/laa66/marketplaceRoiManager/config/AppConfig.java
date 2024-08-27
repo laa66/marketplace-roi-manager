@@ -2,8 +2,8 @@ package com.laa66.marketplaceRoiManager.config;
 
 import com.laa66.marketplaceRoiManager.interceptor.OAuth2HeaderAuthorizationInterceptor;
 import com.laa66.marketplaceRoiManager.service.AllegroDataService;
-import com.laa66.marketplaceRoiManager.service.AllegroDataServiceImpl;
-import com.laa66.marketplaceRoiManager.service.DevAllegroDataService;
+import com.laa66.marketplaceRoiManager.service.impl.AllegroDataServiceImpl;
+import com.laa66.marketplaceRoiManager.service.impl.DevAllegroDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,25 +1,31 @@
-package com.laa66.marketplaceRoiManager.service;
+package com.laa66.marketplaceRoiManager.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.laa66.marketplaceRoiManager.dto.CategoryCollectionDto;
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
 import com.laa66.marketplaceRoiManager.model.allegro.request.*;
+import com.laa66.marketplaceRoiManager.model.allegro.response.Product;
 import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseCategoryCollection;
 import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseCommission;
+import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseProducts;
+import com.laa66.marketplaceRoiManager.service.AllegroDataService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.*;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
 public class DevAllegroDataService implements AllegroDataService {
 
     private final static URI OFFER_FEE_PREVIEW_URL = URI.create("https://api.allegro.pl/pricing/offer-fee-preview");
+    private final static URI SEARCH_PRODUCTS = URI.create("https://api.allegro.pl/sale/products");
 
     private final RestTemplate allegroApiRestTemplate;
 
@@ -54,6 +60,19 @@ public class DevAllegroDataService implements AllegroDataService {
 
         HttpEntity<RequestCommission> httpEntity = new HttpEntity<>(request);
         return allegroApiRestTemplate.postForObject(OFFER_FEE_PREVIEW_URL, httpEntity, ResponseCommission.class);
+    }
+
+    @Override
+    public Product searchProducts(String ean) {
+        URI searchProductsUri = UriComponentsBuilder.fromUri(SEARCH_PRODUCTS)
+                .queryParam("phrase", ean)
+                .build()
+                .toUri();
+        ResponseProducts searchProducts = allegroApiRestTemplate.getForObject(searchProductsUri, ResponseProducts.class);
+        return Optional.ofNullable(searchProducts)
+                .orElseThrow(() -> new RuntimeException("Empty API response."))
+                .getProducts()
+                .getFirst();
     }
 
     /**

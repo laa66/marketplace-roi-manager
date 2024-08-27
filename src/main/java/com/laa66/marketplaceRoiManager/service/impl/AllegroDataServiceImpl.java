@@ -1,8 +1,10 @@
-package com.laa66.marketplaceRoiManager.service;
+package com.laa66.marketplaceRoiManager.service.impl;
 
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
+import com.laa66.marketplaceRoiManager.model.allegro.response.Product;
 import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseCategoryCollection;
 import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseCommission;
+import com.laa66.marketplaceRoiManager.service.AllegroDataService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -44,6 +46,11 @@ public class AllegroDataServiceImpl implements AllegroDataService {
             log.info("count={},queue={},list={}", count, categoryDtoQueue.size(), globalCategories.size());
         }
         return globalCategories;
+    }
+
+    @Override
+    public Product searchProducts(String ean) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
