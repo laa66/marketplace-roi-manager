@@ -78,7 +78,7 @@ public class SecurityConfig {
                 .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
                 .userInfoUri("https://api.allegro.pl/me")
                 .userNameAttributeName("login")
-                .scope(ALLEGRO_SCOPE)
+                .scope("allegro:api:profile:read", "allegro:api:sale:offers:read")
                 .build();
     }
 

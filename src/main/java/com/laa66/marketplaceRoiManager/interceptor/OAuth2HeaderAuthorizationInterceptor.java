@@ -33,6 +33,7 @@ public class OAuth2HeaderAuthorizationInterceptor implements ClientHttpRequestIn
         HttpHeaders headers = request.getHeaders();
         headers.setBearerAuth(accessToken.getTokenValue());
         headers.set("Accept", "application/vnd.allegro.public.v1+json");
+        headers.set("Content-Type", "application/vnd.allegro.public.v1+json");
     }
 
     private OAuth2AuthenticationToken getAuthenticationToken() {

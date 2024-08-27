@@ -1,7 +1,8 @@
 package com.laa66.marketplaceRoiManager.service;
 
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
-import com.laa66.marketplaceRoiManager.model.response.ResponseCategoryCollection;
+import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseCategoryCollection;
+import com.laa66.marketplaceRoiManager.model.allegro.response.ResponseCommission;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -57,4 +58,10 @@ public class AllegroDataServiceImpl implements AllegroDataService {
         return Optional.ofNullable(categories)
                 .orElseThrow(API_RESPONSE_EXCEPTION);
     }
+
+    @Override
+    public ResponseCommission postOfferCommission(String name, String categoryId, String price, String currency) {
+        throw new UnsupportedOperationException();
+    }
+
 }

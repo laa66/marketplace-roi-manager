@@ -36,9 +36,11 @@ public class AppConfig {
 
     @Bean
     @Profile("dev")
-    public AllegroDataService devAllegroDataService() {
-        return new DevAllegroDataService();
+    public AllegroDataService devAllegroDataService(RestTemplate allegroApiRestTemplate) {
+        return new DevAllegroDataService(allegroApiRestTemplate);
     }
 
 
 }
+
+

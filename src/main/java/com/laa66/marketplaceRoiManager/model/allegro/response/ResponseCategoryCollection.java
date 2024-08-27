@@ -1,4 +1,4 @@
-package com.laa66.marketplaceRoiManager.model.response;
+package com.laa66.marketplaceRoiManager.model.allegro.response;
 
 import com.laa66.marketplaceRoiManager.dto.CategoryDto;
 
