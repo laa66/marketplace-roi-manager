@@ -10,10 +10,13 @@ public class ProductDetails {
     private String id;
     private String name;
     private String ean;
-    private String category;
+    private String categoryId;
+    private String categoryName;
 
-    private double price;
+    private double grossPurchasePrice;
+    private double shippingPrice;
+    private int vatAmount;
+
     private String currency;
-    private double allegroCommission;
 
 }
