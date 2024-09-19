@@ -1,17 +1,20 @@
 package com.laa66.marketplaceRoiManager.model;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class FinancialSummary {
 
-    double sellPrice;
-    double payVat;
-    double allegroCommission;
-    double incomeTax;
-    double zus;
-    double profit;
+    private double netSellPrice;
+    private double grossSellPrice;
+    private double payVat;
+    private double allegroCommission;
+    private double incomeTax;
+    private double zus;
+    private double profit;
 
 }
