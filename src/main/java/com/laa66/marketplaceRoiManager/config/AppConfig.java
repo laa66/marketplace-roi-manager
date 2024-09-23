@@ -2,8 +2,10 @@ package com.laa66.marketplaceRoiManager.config;
 
 import com.laa66.marketplaceRoiManager.interceptor.OAuth2HeaderAuthorizationInterceptor;
 import com.laa66.marketplaceRoiManager.service.AllegroDataService;
+import com.laa66.marketplaceRoiManager.service.ProductProcessingService;
 import com.laa66.marketplaceRoiManager.service.impl.AllegroDataServiceImpl;
 import com.laa66.marketplaceRoiManager.service.impl.DevAllegroDataService;
+import com.laa66.marketplaceRoiManager.service.impl.ProductProcessingServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +40,11 @@ public class AppConfig {
     @Profile("dev")
     public AllegroDataService devAllegroDataService(RestTemplate allegroApiRestTemplate) {
         return new DevAllegroDataService(allegroApiRestTemplate);
+    }
+
+    @Bean
+    public ProductProcessingService productProcessingService(AllegroDataService allegroDataService) {
+        return new ProductProcessingServiceImpl(allegroDataService);
     }
 
 

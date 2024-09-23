@@ -13,9 +13,11 @@ import java.util.Currency;
 import java.util.List;
 import java.util.stream.Stream;
 
-// TODO extract calculation functionality to outer plain java class,
-//  place it inside service package
-//  refactor model naming, ProductDto will be used later inside incoming requests
+/*
+TODO extract calculation functionality to outer plain java class,
+ place it inside service package
+ refactor model naming, ProductDto will be used later inside incoming requests
+*/
 @AllArgsConstructor
 public class ProductProcessingServiceImpl implements ProductProcessingService {
 

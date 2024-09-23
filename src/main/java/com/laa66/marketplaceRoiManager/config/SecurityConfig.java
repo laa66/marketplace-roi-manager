@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -37,10 +38,11 @@ public class SecurityConfig {
     @Value("${api.allegro.scope}")
     private String ALLEGRO_SCOPE;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, RestTemplate oAuth2RestTemplate) throws Exception {
-        httpSecurity.authorizeHttpRequests(auth -> auth
+        httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/csv")
+                        .permitAll()
                         .anyRequest()
                         .authenticated())
                 .oauth2Login(oauth2 ->
