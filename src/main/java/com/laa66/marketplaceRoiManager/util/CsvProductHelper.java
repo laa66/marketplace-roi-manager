@@ -1,6 +1,7 @@
 package com.laa66.marketplaceRoiManager.util;
 
 import com.laa66.marketplaceRoiManager.dto.ProductDto;
+import com.laa66.marketplaceRoiManager.exception.CsvMappingException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.util.List;
 
 public class CsvProductHelper {
@@ -18,7 +20,7 @@ public class CsvProductHelper {
         return TYPE.equals(file.getContentType());
     }
 
-    public static List<ProductDto> csvToProductDto(MultipartFile file) throws IOException {
+    public static List<ProductDto> csvToProductDto(MultipartFile file) {
         return parseCsv(file).stream()
                 .map(csvRecord -> new ProductDto(
                         csvRecord.get("ean"),
@@ -30,7 +32,7 @@ public class CsvProductHelper {
                 )).toList();
     }
 
-    private static List<CSVRecord> parseCsv(MultipartFile file) throws IOException {
+    private static List<CSVRecord> parseCsv(MultipartFile file) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
             return CSVFormat.EXCEL.builder()
                     .setHeader()
@@ -38,6 +40,8 @@ public class CsvProductHelper {
                     .build()
                     .parse(reader)
                     .getRecords();
+        } catch (IOException | UncheckedIOException e) {
+            throw new CsvMappingException(e.getMessage(), e);
         }
     }
 
