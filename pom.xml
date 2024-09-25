@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.laa66</groupId>
-	<artifactId>marketplace-roi-manager</artifactId>
+	<artifactId>marketplace-roi-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>marketplace-roi-manager</name>
+	<name>marketplace-roi-api</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

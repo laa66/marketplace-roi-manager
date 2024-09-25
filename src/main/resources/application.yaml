@@ -2,7 +2,7 @@ spring:
   mvc:
     log-request-details: true
   application:
-    name: marketplaceRoiManager
+    name: marketplaceRoiApi
   profiles:
     active:
       - dev
