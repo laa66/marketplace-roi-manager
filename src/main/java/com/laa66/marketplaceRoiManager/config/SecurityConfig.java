@@ -41,8 +41,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, RestTemplate oAuth2RestTemplate) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/csv")
-                        .permitAll()
+                        //.requestMatchers("/csv")
+                        //.permitAll()
                         .anyRequest()
                         .authenticated())
                 .oauth2Login(oauth2 ->

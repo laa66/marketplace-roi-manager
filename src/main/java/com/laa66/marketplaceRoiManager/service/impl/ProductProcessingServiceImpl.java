@@ -13,11 +13,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.stream.Stream;
 
-/*
-TODO extract calculation functionality to outer plain java class,
- place it inside service package
- refactor model naming, ProductDto will be used later inside incoming requests
-*/
+
 @AllArgsConstructor
 public class ProductProcessingServiceImpl implements ProductProcessingService {
 
@@ -34,10 +30,10 @@ public class ProductProcessingServiceImpl implements ProductProcessingService {
                 .ean(productDto.ean())
                 .categoryId(product.getCategory().getId())
                 .categoryName(product.getCategory().getName())
-                .grossPurchasePrice(productDto.grossPurchasePrice())
-                .shippingPrice(productDto.shippingPrice())
-                .vatAmount(productDto.vatAmount() == null ? DEFAULT_VAT_PL : productDto.vatAmount())
+                .vatThreshold(productDto.vatThreshold() == null ? DEFAULT_VAT_PL : productDto.vatThreshold())
                 .currency(Currency.getInstance("PLN"))
+                .netPurchasePrice(productDto.netPurchasePrice())
+                .shippingPrice(productDto.shippingPrice())
                 .build();
     }
 
@@ -49,13 +45,17 @@ public class ProductProcessingServiceImpl implements ProductProcessingService {
                             marginThreshold,
                             productDetails,
                             new FinancialSummary());
-                    calculator.calculateSellPrice()
+                    calculator.calculateTotalPurchasePrice()
+                            .calculateSellPrice()
                             .calculatePayVat()
                             .addAllegroCommission(Double.parseDouble(
-                                    allegroDataService.postOfferCommission(productDetails.getName(),
+                                    allegroDataService.postOfferCommission(calculator.getProductDetails().getName(),
                                                     productDetails.getCategoryId(),
                                                     Double.toString(calculator.getFinancialSummary().getGrossSellPrice()), "PLN")
                                             .getCommissions()
+                                            .stream()
+                                            .filter(commissionItem -> commissionItem.getType().equals("commissionFee"))
+                                            .toList()
                                             .getFirst()
                                             .getFee()
                                             .getAmount()))

@@ -6,6 +6,8 @@ import com.laa66.marketplaceRoiManager.service.ProductProcessingService;
 import com.laa66.marketplaceRoiManager.util.CsvProductHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,10 +24,9 @@ public class ProductImportController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ProductSummaryDto getProductsSummary(@RequestPart("file") MultipartFile file) throws IOException {
+    public List<ProductSummaryDto> getProductsSummary(@RequestPart("file") MultipartFile file, @AuthenticationPrincipal Authentication authentication) throws IOException {
         List<ProductDto> productDtos = CsvProductHelper.csvToProductDto(file);
-        System.out.println(productDtos);
-        return null;
+        return productProcessingService.processProductCollection(productDtos);
     }
 
 }

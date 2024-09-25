@@ -3,6 +3,8 @@ package com.laa66.marketplaceRoiManager.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @Getter
 public abstract class ProfitCalculator {
@@ -32,14 +34,19 @@ public abstract class ProfitCalculator {
 
     public ProfitCalculator calculateSellPrice() {
         financialSummary.setNetSellPrice(marginThreshold * productDetails.getNetPurchasePrice());
-        financialSummary.setGrossSellPrice(financialSummary.getNetSellPrice() * .01 * productDetails.getVatThreshold()
-                + productDetails.getShippingPrice());
+
+        financialSummary.setGrossSellPrice(BigDecimal.valueOf(financialSummary.getNetSellPrice())
+                .multiply(BigDecimal.valueOf(1 + (0.01 * productDetails.getVatThreshold())))
+                .add(BigDecimal.valueOf(productDetails.getShippingPrice()))
+                .doubleValue());
         return this;
     }
 
     public ProfitCalculator calculatePayVat() {
-        double vat = .01 * productDetails.getVatThreshold();
-        financialSummary.setPayVat((vat * financialSummary.getNetSellPrice()) * (vat * productDetails.getNetPurchasePrice()));
+        BigDecimal vat = BigDecimal.valueOf(.01 * productDetails.getVatThreshold());
+        financialSummary.setPayVat((vat.multiply(BigDecimal.valueOf(financialSummary.getNetSellPrice())))
+                .subtract((vat.multiply(BigDecimal.valueOf(productDetails.getNetPurchasePrice()))))
+                .doubleValue());
         return this;
     }
 
@@ -50,18 +57,20 @@ public abstract class ProfitCalculator {
 
     public ProfitCalculator calculateIncomeTaxAndZus() {
         double purchaseSellDifference = financialSummary.getNetSellPrice() - financialSummary.getAllegroCommission() - productDetails.getNetPurchasePrice();
-        financialSummary.setIncomeTax(incomeTaxThreshold * purchaseSellDifference);
-        financialSummary.setZus(zusThreshold * purchaseSellDifference);
+        financialSummary.setIncomeTax(Math.abs(incomeTaxThreshold * purchaseSellDifference));
+        financialSummary.setZus(Math.abs(zusThreshold * purchaseSellDifference));
         return this;
     }
 
     public ProfitCalculator calculateProfit() {
-        double grossPurchaseSellDiff = financialSummary.getGrossSellPrice() - productDetails.getGrossPurchasePrice();
+        BigDecimal grossPurchaseSellDiff = BigDecimal.valueOf(financialSummary.getGrossSellPrice())
+                .subtract(BigDecimal.valueOf(productDetails.getGrossPurchasePrice()));
         financialSummary.setProfit(grossPurchaseSellDiff
-                - financialSummary.getAllegroCommission()
-                - financialSummary.getPayVat()
-                - financialSummary.getZus()
-                - financialSummary.getIncomeTax());
+                .subtract(BigDecimal.valueOf(financialSummary.getAllegroCommission()))
+                .subtract(BigDecimal.valueOf(financialSummary.getPayVat()))
+                .subtract(BigDecimal.valueOf(financialSummary.getZus()))
+                .subtract(BigDecimal.valueOf(financialSummary.getIncomeTax()))
+                .doubleValue());
         return this;
     }
 
